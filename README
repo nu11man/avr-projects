@@ -1,0 +1,30 @@
+## Pasos para compilar código C para un microcontrollador AVR
+
+Si tenemos un archivo (por ejemplo) main.c, debemos ejecutar la siguiente instrucción para generar el código "objeto".
+
+```avr-gcc -mmcu=attiny88 -DF_CPU=16000000UL -O1 main.c -o main.elf```
+
+Cuando tenemos el archivo .elf (código objeto) vamos a transformarlo en valores hexadecimales, que es el que se graba finalmente en la memoria flash de los microcontroladores.
+
+```avr-objcopy -O ihex -R .eeprom main.elf main.hex```
+
+Luego debemos cargar el programa en el microcontrolador usando el software avrdude y el programador de nuestra eleccón (en este ejemplo es un AVR USBasp)
+
+```avrdude -c <programador> -P <puerto> -p <nombre_micro> -U flash:w:main.hex:i```
+
+Donde:
+<programador> es el nombre del dispositivo con el cual cargaremos el programa en el microcontrolador, en este caso "usbasp".
+<puerto> es el nombre del puerto al cual está conectado el dispositivo (en este caso "usb").
+<nombre_micro> es el identificador del microcontrolador, por ejemplo: t88 para el ATtiny88 o m328p para el ATMega328p.
+
+Finalmente a modo de ejemplo, ejecutaríamos la siguiente instrucción en la línea de comandos para cargar nuestro programa main.c en nuestro microcontrolador ATMega328p conectado al puerto USB.
+
+```avrdude -c usbasp -P usb -p m328p -U flash:w:main.hex:i```
+
+
+## Cómo leer los fusibles de configuración de un microcontrolador AVR con avr-dude.
+
+```avrdude -c usbasp -p m328p -v -U lfuse:r:-:h -U hfuse:r:-:h -U efuse:r:-:h```
+
+
+## Cómo identificar el puerto al que se conecta mi programador.
