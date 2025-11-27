@@ -2,7 +2,7 @@
 #define F_CPU 16000000UL // Define CPU frequency as 16MHz (unsigned long)
 #endif
 
-#define DELAY 700
+#define DELAY 250
 
 #include <avr/io.h>
 #include <util/delay.h>
